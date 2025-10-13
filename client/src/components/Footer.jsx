@@ -1,26 +1,43 @@
 import React from 'react'
 import { assets } from '../assets/assets'
-import { Phone } from 'lucide-react'
+import { Phone, MessageSquareHeart } from 'lucide-react'
 
 const Footer = () => {
   return (
-    <footer className="px-6 md:px-16 mt-50 lg:px-24 xl:px-32 pt-8 w-full bg-gradient-to-b from-[#014d4e] to-[#003333]  relative text-gray-50">
+    <footer className="px-6 md:px-16 mt-1 lg:px-24 xl:px-32 pt-8 w-full bg-gradient-to-b from-[#014d4e] to-[#003333]  relative text-gray-50">
       {/* Row 1: Logo and Description */}
       <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-amber-500/30 pb-6">
-        <div className="md:max-w-96">
-                           <img src={assets.logo} alt="Logo" className=' w-40 h-auto mb-6'/>
-          <p className="mt-6 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        <div className="md:max-w-96  ">
+                          <img src={assets.logo} alt="Logo" className=' w-40 h-auto  mb-1 '/>
+          <p className="text-sm">
+            Century Cinema isn’t just the top destination for movies—it’s also the perfect venue for your next big meeting! With our exceptional screens and sound systems, you can be sure that your message will be seen and heard clearly.
           </p>
         </div>
+         <div className="w-full md:w-[400px] lg:w-[450px] h-64 md:h-72 rounded-xl overflow-hidden shadow-2xl border-2 border-ambe-400/ transition-all duration-300">
+  <iframe
+    title="Century Mall Location"
+    src="https://www.google.com/maps?q=Century+Mall,+Addis+Ababa,+Ethiopia&output=embed"
+    width="100%"
+    height="100%"
+    style={{ border: 0 }}
+    allowFullScreen=""
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+  ></iframe>
+</div>
       </div>
+ 
+
+
+
 
       {/* Row 2: Company and Contact */}
       <div className="flex flex-col md:flex-row justify-between w-full gap-20 mt-6">
         <div>
-          <h2 className="font-semibold mb-5 text-gray-800">Company</h2>
+      <h2 className="font-semibold mb-5 text-amber-500 drop-shadow-[3px_3px_2px_rgba(0,0,0,0.5)]">
+  Company
+</h2>
+
           <ul className="text-sm space-y-2">
             <li><a href="#">Home</a></li>
             <li><a href="#">About us</a></li>
@@ -29,11 +46,28 @@ const Footer = () => {
           </ul>
         </div>
         <div>
-          <h2 className="font-semibold mb-5 text-gray-800">Get in touch</h2>
-          <div className="text-sm space-y-2">
-            <p>+1-212-456-7890</p>
-            <p>contact@example.com</p>
-          </div>
+        <h2 className="font-semibold mb-5 text-amber-500 drop-shadow-[3px_3px_2px_rgba(0,0,0,0.5)]">Get in touch</h2>
+        <div className="space-y-3 text-sm">
+  {/* Phone */}
+  <div className="flex items-center gap-2">
+    <Phone className="w-5 h-5 text-amber-500" />
+    <span className="text-gray-100 hover:text-amber-400 transition-colors">
+      +1-212-456-7890
+    </span>
+  </div>
+
+  {/* Email / Message */}
+  <div className="flex items-center gap-2">
+    <MessageSquareHeart className="w-5 h-5 text-amber-500" />
+    <a
+      href="mailto:centuryW@gmail.com"
+      className="text-gray-100 hover:text-amber-400 transition-colors"
+    >
+      centuryW@gmail.com
+    </a>
+  </div>
+</div>
+
         </div>
       </div>
 
@@ -63,7 +97,7 @@ const Footer = () => {
       </div>
 
       <p className="pt-4 text-center text-xs md:text-sm pb-5">
-        Copyright 2024 © <a href="https://prebuiltui.com">PrebuiltUI</a>. All Right Reserved.
+        Copyright 2024 © <a href="/">Century Cinema</a>. All Right Reserved.
       </p>
     </footer>
   )
