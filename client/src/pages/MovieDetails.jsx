@@ -42,8 +42,11 @@ const MovieDetails = () => {
 
         <div className="relative flex flex-col gap-3">
           <BlurCircle top="-50px" right="-50px" />
+<div className="flex justify-between items-center">
+  <p className="text-primary-dull/78 uppercase underline">{movie.language}</p>
+  <p className="text-primary-dull bg-primary uppercase border-1 py-1 px-5 border-amber-50/50 rounded ">{movie.playGround}</p>
+</div>
 
-          <p className="text-primary-dull/78  uppercase underline ">{movie.language}</p>
 
           <h1 className="text-4xl font-semibold max-w-96 text-balance">{movie.title}</h1>
 

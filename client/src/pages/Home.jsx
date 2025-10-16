@@ -4,7 +4,8 @@ import FeaturedSection from '../components/FeaturedSection'
 import TraillerSection from '../components/TraillerSection'
 import UpcomingSection from '../components/UpcomingSection'
 
-import CinemaPromo from '../components/CinemaPromo'
+
+import CinemaServices from '../components/CinemaServices'
 
 
 
@@ -21,6 +22,8 @@ const Home = () => {
             {/*<CinemaPromo />
          
             <TraillerSection />*/}
+
+                <CinemaServices/>
 
         </div>
     )
