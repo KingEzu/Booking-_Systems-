@@ -12,11 +12,10 @@ const UpcomingSection = () => {
 
   // Adjust items per page & desktop flag
   useEffect(() => {
- 
-     const handleResize = () => {
-       const width = window.innerWidth
+    const handleResize = () => {
+      const width = window.innerWidth
       if (width < 1280) { // anything below desktop
-        setItemsPerPage(totalMovies) // show 1 card per slide
+        setItemsPerPage(totalMovies) // show all cards
         setIsDesktop(false) // hide arrows
       } else {
         setItemsPerPage(3) // desktop: 3 cards per slide
@@ -47,9 +46,8 @@ const UpcomingSection = () => {
   )
 
   return (
-    <div className="px-6 md:px-16 lg:px-24 xl:px-44 overflow-hidden relative">
+    <div className="px-6 md:px-16 lg:px-24 xl:px-44 sm:mb-0 overflow-hidden relative bg-gradient-to-b min-h-[70vh] from-gray-900 via-black to-gray-900">
       <BlurCircle top="-100px" left="-100px" />
-
 
       {/* Section Title */}
       <div className="flex items-center justify-between pt-20 pb-10">
@@ -61,9 +59,20 @@ const UpcomingSection = () => {
 
       {/* No movies fallback */}
       {totalMovies === 0 ? (
-        <p className="text-gray-400 text-center pb-10">
-          There are no movies this week
-        </p>
+        <div className="flex flex-col items-center justify-center h-[50vh] space-y-4">
+          <div className="relative">
+            <span className="text-6xl animate-bounce">🎬</span>
+            <div className="absolute inset-0 blur-2xl bg-amber-400/20 rounded-full"></div>
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-bold text-center text-amber-300/90 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]">
+            Upcoming Movies not available
+          </h1>
+
+          <p className="text-gray-400 text-center max-w-md">
+            Check back later for the latest shows — new movies are coming soon!
+          </p>
+        </div>
       ) : (
         <div className="flex items-center gap-4 flex-wrap justify-center">
           {/* Left Arrow (desktop only) */}

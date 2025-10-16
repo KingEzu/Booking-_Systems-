@@ -11,7 +11,7 @@ const genres = [
 ];
 
 const paragraphs = [
-  "0Century Cinema isn’t just the top destination for movies—it’s also the perfect venue for your next big meeting! With our exceptional screens and sound systems, you can be sure that your message will be seen and heard clearly."
+  "0Our cinema features 3 state-of-the-art halls with a total capacity of 700 seats, displaying Hollywood and Ethiopian movies. Picture: We use Dolby® 3D, which uses unique full-spectrum color technology that provides extremely crisp, clear images. Audio: Our Dolby® Atoms® Next-Generation Audio for Cinema creates powerful moving audio.."
 ];
 
 const HeroSection = () => {
