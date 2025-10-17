@@ -97,7 +97,7 @@ const Footer = () => {
       </div>
 
       <p className="pt-4 text-center text-xs md:text-sm pb-5">
-        Copyright 2024 © <a href="/">Century Cinema</a>. All Right Reserved.
+        Copyright 2025 © <a href="/">Century Cinema</a>. All Right Reserved.
       </p>
     </footer>
   )
