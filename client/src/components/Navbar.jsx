@@ -33,7 +33,6 @@ const Navbar = () => {
         />
                 <Link onClick={()=> {scrollTo(0,0); setIsOpen(false) }} to ='/'>Home</Link>
                 <Link onClick={()=> {scrollTo(0,0); setIsOpen(false) }} to ='/movies'>Movies</Link>
-                <Link onClick={()=> {scrollTo(0,0); setIsOpen(false) }} to ='/'>Releses</Link>
                 <Link onClick={()=> {scrollTo(0,0); setIsOpen(false) }} to ='/'>Packages</Link>
                 <Link onClick={()=> {scrollTo(0,0); setIsOpen(false) }} to ='/favorite'>Favorites</Link>
 
