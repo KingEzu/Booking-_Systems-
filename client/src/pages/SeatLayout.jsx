@@ -212,7 +212,7 @@ const SeatLayout = () => {
             <span>{selectedCategory ? selectedCategory.toUpperCase() : "No category chosen"}</span>
           </h2>
         )}
-        <img src={assets.screenImage} alt="screen" className="mb-3 w-80" />
+        <img src={assets.screenImage} alt="screen" className="mb-1 w-100" />
         <p className="text-gray-400 text-sm mb-6">Screen side</p>
 
         {hallLayout ? (
@@ -222,24 +222,27 @@ const SeatLayout = () => {
   <div key={section} className="flex flex-col items-center">
     <h3 className="text-lg font-medium text-amber-400 mb-3 capitalize">{section} Side</h3>
     <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${cols}, minmax(20px, 1fr))` }}>
-      {generateSeats(rows, cols, startCol, customRows, reverse).map((seat) => {
-        const isSelected = selectedSeats.includes(seat);
-        const isDisabled = disabledSeats?.includes(seat);
-        return (
-          <button
-            key={seat}
-            onClick={() => !isDisabled && toggleSeat(seat)}
-            disabled={isDisabled}
-            className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-md border transition-all duration-200 ${
-              isSelected
-                ? "bg-primary text-black border-primary scale-105"
-                : isDisabled
-                ? "bg-transparent cursor-not-allowed"
-                : "bg-gray-700 border-gray-600 hover:bg-amber-500/80 hover:scale-105"
-            }`}
-          ></button>
-        );
-      })}
+  {generateSeats(rows, cols, startCol, customRows, reverse).map((seat) => {
+  const isSelected = selectedSeats.includes(seat);
+  const isDisabled = disabledSeats?.includes(seat);
+  return (
+    <button
+      key={seat}
+      onClick={() => !isDisabled && toggleSeat(seat)}
+      disabled={isDisabled}
+      className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-md border text-[10px] sm:text-xs font-medium transition-all duration-200 ${
+        isSelected
+          ? "bg-primary text-black border-primary scale-105"
+          : isDisabled
+          ? "bg-transparent cursor-not-allowed text-gray-500"
+          : "bg-gray-700 border-gray-600 hover:bg-amber-500/80 hover:scale-105 text-white"
+      }`}
+    >
+      {!isDisabled && seat}
+    </button>
+  );
+})}
+      
     </div>
   </div>
 ))}
