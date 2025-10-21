@@ -9,6 +9,7 @@ import MyBookings from './pages/MyBookings'
 import Favorite from './pages/Favorite'
 import { Toaster } from 'react-hot-toast'
 import Footer from './components/Footer'
+import OrderSnacks from './pages/OrderSancks.jsx'
 
 const App = () => {
 
@@ -23,9 +24,10 @@ const App = () => {
        {/* <Route path='/Movies/:id' element={<MovieDetails/>}/>*/}
        <Route path='/movie/:id' element={<MovieDetails />} />
 
-         <Route path='/Movies/:id/:date' element={<SeatLayout />}/>
-          <Route path='/my-bookings' element={<MyBookings />}/>
-           <Route path='/favorite' element={<Favorite/>}/>
+       <Route path='/Movies/:id/:date' element={<SeatLayout />}/>
+        <Route path='/Movies/:id/:date/:Snacks' element={<OrderSnacks />}/>
+        <Route path='/my-bookings' element={<MyBookings />}/>
+        <Route path='/favorite' element={<Favorite/>}/>
 
 
 
