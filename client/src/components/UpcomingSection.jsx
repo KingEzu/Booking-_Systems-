@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { dummyUpcomingMovies } from "../assets/assets"
+import { dummyUpcomingMovies } from "../assets/assets" // ✅ import anounce
 import UpcomingMovieCard from "./UpcomingMovieCard"
 import BlurCircle from "./BlurCircle"
 import { ArrowLeft, ArrowRight } from "lucide-react"
@@ -14,11 +14,11 @@ const UpcomingSection = () => {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
-      if (width < 1280) { // anything below desktop
-        setItemsPerPage(totalMovies) // show all cards
-        setIsDesktop(false) // hide arrows
+      if (width < 1280) {
+        setItemsPerPage(totalMovies)
+        setIsDesktop(false)
       } else {
-        setItemsPerPage(3) // desktop: 3 cards per slide
+        setItemsPerPage(3)
         setIsDesktop(true)
       }
     }
@@ -40,10 +40,7 @@ const UpcomingSection = () => {
     }
   }
 
-  const visibleMovies = dummyUpcomingMovies.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  )
+  const visibleMovies = dummyUpcomingMovies.slice(startIndex, startIndex + itemsPerPage)
 
   return (
     <div className="px-6 md:px-16 lg:px-24 xl:px-44 sm:mb-0 overflow-hidden relative bg-gradient-to-b min-h-[70vh] from-gray-900 via-black to-gray-900">
@@ -105,6 +102,9 @@ const UpcomingSection = () => {
           )}
         </div>
       )}
+
+      {/* Rotated Image */}
+    
     </div>
   )
 }
