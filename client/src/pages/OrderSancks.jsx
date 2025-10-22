@@ -1,157 +1,203 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { assets, dummyDateTimeData, dummyShowsData } from "../assets/assets";
-import Loading from "../components/Loading";
-import { ClockIcon } from "lucide-react";
-import isoTimeFormat from "../lib/isoTimeFormat";
-import toast from "react-hot-toast";
-import BlurCircle from "../components/BlurCircle";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { snacksData } from "../assets/assets";
 
-const HallLayout = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const OrderSnacks = () => {
+  const location = useLocation();
+  const { selectedSeats = [], category, hall, pricePerSeat } = location.state || {};
 
-  const [selectedShow, setSelectedShow] = useState(null);
-  const [selectedSeats, setSelectedSeats] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({});
+  const [activeCard, setActiveCard] = useState(null);
+  const [selectedWaterId, setSelectedWaterId] = useState(null);
 
-  // simulate data
-  useEffect(() => {
-    setTimeout(() => {
-      const show = dummyShowsData.find((s) => s.id === id);
-      setSelectedShow(show);
-      setLoading(false);
-    }, 1000);
-  }, [id]);
+  // Convert seat price to number
+  const seatPrice = Number(pricePerSeat?.replace(/\D/g, "")) || 0;
 
-  if (loading || !selectedShow) return <Loading />;
-
-  const hallKey = selectedShow.hall.toLowerCase();
-
-  const hallLayout = {
-    left: { rows: 8, cols: 6, startCol: 1 },
-    middle: { rows: 8, cols: 10, startCol: 7 },
-    right: { rows: 8, cols: 6, startCol: 17 },
+  // Handle + / - button clicks
+  const updateQuantity = (id, delta) => {
+    if (!id) return;
+    setQuantities((prev) => {
+      const newQty = Math.max((prev[id] || 0) + delta, 0);
+      return { ...prev, [id]: newQty };
+    });
   };
 
-  const generateSeats = (rows, cols, startCol = 1) => {
-    const seats = [];
-    for (let r = 0; r < rows; r++) {
-      const rowLetter = String.fromCharCode(65 + r);
-      for (let c = 0; c < cols; c++) {
-        seats.push(`${rowLetter}${startCol + c}`);
-      }
-    }
-    return seats;
+  // Handle card click → toggle quantity controls
+  const handleCardClick = (id) => {
+    setActiveCard((prev) => (prev === id ? null : id));
   };
 
-  const toggleSeat = (seat) => {
-    setSelectedSeats((prev) =>
-      prev.includes(seat)
-        ? prev.filter((s) => s !== seat)
-        : [...prev, seat]
-    );
-  };
+  // Calculate total snacks price
+  const totalSnacksPrice = snacksData.reduce((sum, item) => {
+    const qty = quantities[item.id] || 0;
+    return sum + qty * item.price;
+  }, 0);
 
-  const handleProceed = () => {
-    if (selectedSeats.length === 0) {
-      toast.error("Please select at least one seat!");
-      return;
-    }
-    toast.success(`Proceeding with ${selectedSeats.length} seat(s)`);
-    navigate("/payment");
-  };
+  // Total = seat + snacks
+  const totalPrice = seatPrice * selectedSeats.length + totalSnacksPrice;
+
+  // Split snacks and drinks logically
+  const snacks = snacksData.filter((item) => item.name !== "Water" && item.name !== "Soft Drink");
+  const drinks = snacksData.filter((item) => item.name === "Water" || item.name === "Soft Drink");
+  const waterItems = drinks.filter((item) => item.name === "Water");
+  const softDrinks = drinks.filter((item) => item.name === "Soft Drink");
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center py-8">
-      <BlurCircle />
-      <h2 className="text-3xl font-bold text-amber-400 mb-4">
-        {selectedShow.title} — {selectedShow.hall}
+    <div className="p-6 mt-20 text-center text-white">
+      {/* Header */}
+      <h2 className="text-2xl font-bold mb-2 text-primary">
+        🎟️ {hall || "Hall"} — {category?.toUpperCase() || ""}
       </h2>
+      <p className="text-lg mb-6 text-gray-300">
+        {selectedSeats.length} seat(s) selected — Br {(seatPrice * selectedSeats.length).toLocaleString()}
+      </p>
 
-      {/* Time and ticket info */}
-      <div className="flex flex-col items-center mb-8">
-        <div className="flex items-center gap-2 text-amber-400 text-lg">
-          <ClockIcon className="w-5 h-5" />
-          {isoTimeFormat(selectedShow.time)}
-        </div>
-        <div className="flex gap-3 mt-2">
-          <span className="px-3 py-1 bg-amber-500/20 border border-amber-500 rounded-lg">
-            Regular: 240 ETB
-          </span>
-          <span className="px-3 py-1 bg-green-500/20 border border-green-500 rounded-lg">
-            VIP: 260 ETB
-          </span>
-        </div>
-      </div>
+      {/* 🍿 Snacks */}
+      <h2 className="text-2xl font-bold mb-4 text-primary">🍿 Snacks</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mb-8">
+        {snacks.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => handleCardClick(item.id)}
+            className={`rounded-2xl p-3 cursor-pointer transition duration-200 border ${
+              activeCard === item.id ? "border-primary scale-105" : "border-gray-700 hover:border-primary/50"
+            }`}
+          >
+            <img src={item.image} alt={item.name} className="w-full h-32 object-contain mb-2" />
+            <h3 className="font-semibold text-lg">{item.name}</h3>
+            <p className="text-sm text-gray-400">{item.desc}</p>
+            <p className="mt-2 font-bold text-primary">{item.price} ETB</p>
 
-      {/* ✅ Responsive Hall Layout */}
-      <div
-        className={`w-full ${
-          hallKey === "hall1"
-            ? "overflow-x-auto md:overflow-x-auto lg:overflow-visible pb-6"
-            : "overflow-x-visible"
-        }`}
-      >
-        <div
-          className={`${
-            hallKey === "hall1"
-              ? "flex gap-8 min-w-max justify-start px-4 md:px-6"
-              : "grid md:grid-cols-2 lg:flex gap-4 justify-center"
-          }`}
-        >
-          {Object.entries(hallLayout).map(
-            ([section, { rows, cols, startCol }]) => {
-              const seats = generateSeats(rows, cols, startCol);
-              return (
-                <div
-                  key={section}
-                  className="flex flex-col items-center gap-3 bg-gray-800/10 p-4 rounded-xl shadow-lg min-w-[320px] md:min-w-[380px]"
+            {/* Quantity controls */}
+            {activeCard === item.id && (
+              <div className="flex items-center justify-center mt-2 gap-3" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={() => updateQuantity(item.id, -1)}
+                  disabled={!quantities[item.id]}
+                  className={`px-3 py-1 rounded-full font-bold ${
+                    quantities[item.id] ? "bg-primary text-white" : "bg-gray-600 text-gray-300 cursor-not-allowed"
+                  }`}
                 >
-                  <h3 className="text-lg font-semibold text-amber-400 capitalize">
-                    {section} Side
-                  </h3>
-                  <div
-                    className="grid gap-2"
-                    style={{
-                      gridTemplateColumns: `repeat(${cols}, minmax(30px, 1fr))`,
-                    }}
-                  >
-                    {seats.map((seat) => {
-                      const isSelected = selectedSeats.includes(seat);
-                      return (
-                        <button
-                          key={seat}
-                          onClick={() => toggleSeat(seat)}
-                          className={`w-8 h-8 rounded-md border text-xs font-medium transition-all duration-200 ${
-                            isSelected
-                              ? "bg-amber-400 text-black border-amber-400 scale-105"
-                              : "bg-gray-700 border-gray-600 hover:bg-amber-500/80 hover:scale-105 text-white"
-                          }`}
-                        >
-                          {seat}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            }
-          )}
-        </div>
+                  -
+                </button>
+                <span className="min-w-[24px]">{quantities[item.id] || 0}</span>
+                <button
+                  onClick={() => updateQuantity(item.id, +1)}
+                  className="px-3 py-1 bg-primary text-white rounded-full font-bold"
+                >
+                  +
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
-      {/* Proceed button */}
-      <div className="mt-10">
-        <button
-          onClick={handleProceed}
-          className="bg-amber-500 hover:bg-amber-400 text-black px-8 py-3 rounded-xl font-semibold transition-all"
-        >
-          Proceed
+      {/* 🥤 Drinks */}
+      <h2 className="text-2xl font-bold mb-4 text-primary">🥤 Drinks</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mb-8">
+        {/* Water card */}
+        {waterItems.length > 0 && (
+          <div
+            onClick={() => handleCardClick("water")}
+            className={`rounded-2xl p-3 cursor-pointer transition duration-200 border ${
+              activeCard === "water" ? "border-primary scale-105" : "border-gray-700 hover:border-primary/50"
+            }`}
+          >
+            <img src={waterItems[0].image} alt="Water" className="w-full h-32 object-contain mb-2" />
+            <h3 className="font-semibold text-lg">Water</h3>
+            <p className="text-sm text-gray-400">Choose size and quantity</p>
+
+            {activeCard === "water" && (
+              <div className="flex flex-col items-center gap-2 mt-2">
+                {/* Variant buttons */}
+                <div className="flex gap-3">
+                  {waterItems.map((w) => (
+                    <button
+                      key={w.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedWaterId(w.id);
+                      }}
+                      className={`px-3 py-1 rounded-xl border font-medium ${
+                        selectedWaterId === w.id ? "bg-primary text-white border-primary" : "border-gray-600 text-gray-400"
+                      }`}
+                    >
+                      {w.desc.split(" ")[0]}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Quantity controls */}
+                <div className="flex items-center gap-3 mt-2" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={() => updateQuantity(selectedWaterId, -1)}
+                    disabled={!quantities[selectedWaterId]}
+                    className={`px-3 py-1 rounded-full font-bold ${
+                      quantities[selectedWaterId] ? "bg-primary text-white" : "bg-gray-600 text-gray-300 cursor-not-allowed"
+                    }`}
+                  >
+                    -
+                  </button>
+                  <span className="min-w-[24px]">{quantities[selectedWaterId] || 0}</span>
+                  <button
+                    onClick={() => updateQuantity(selectedWaterId, +1)}
+                    className="px-3 py-1 bg-primary text-white rounded-full font-bold"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Soft Drinks */}
+        {softDrinks.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => handleCardClick(item.id)}
+            className={`rounded-2xl p-3 cursor-pointer transition duration-200 border ${
+              activeCard === item.id ? "border-primary scale-105" : "border-gray-700 hover:border-primary/50"
+            }`}
+          >
+            <img src={item.image} alt={item.name} className="w-full h-32 object-contain mb-2" />
+            <h3 className="font-semibold text-lg">{item.name}</h3>
+            <p className="text-sm text-gray-400">{item.desc}</p>
+            <p className="mt-2 font-bold text-primary">{item.price} ETB</p>
+
+            {activeCard === item.id && (
+              <div className="flex items-center justify-center mt-2 gap-3" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={() => updateQuantity(item.id, -1)}
+                  disabled={!quantities[item.id]}
+                  className={`px-3 py-1 rounded-full font-bold ${
+                    quantities[item.id] ? "bg-primary text-white" : "bg-gray-600 text-gray-300 cursor-not-allowed"
+                  }`}
+                >
+                  -
+                </button>
+                <span className="min-w-[24px]">{quantities[item.id] || 0}</span>
+                <button
+                  onClick={() => updateQuantity(item.id, +1)}
+                  className="px-3 py-1 bg-primary text-white rounded-full font-bold"
+                >
+                  +
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* ✅ Confirm Button */}
+      <div className="mt-8">
+        <button className="bg-primary text-white px-6 py-3 rounded-2xl text-lg font-semibold">
+          Confirm Order — Br {totalPrice.toLocaleString()}
         </button>
       </div>
     </div>
   );
 };
 
-export default HallLayout;
+export default OrderSnacks;
