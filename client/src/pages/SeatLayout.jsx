@@ -25,7 +25,6 @@ const generateSeats = (rows, cols, startCol = 1, customRows = {}, reverse = fals
   return seats;
 };
 
-// Seat Layout Configurations
 const layouts = {
   hall1: {
     regular: {
@@ -36,7 +35,7 @@ const layouts = {
     vip: {
       left: { rows: 4, cols: 7, startCol: 1 },
       middle: { rows: 5, cols: 8, startCol: 8 },
-      right: { rows: 4, cols: 9, startCol: 16 },
+      right: { rows: 4, cols: 9, startCol: 16, disabledSeats: ["B24"] },
     },
   },
   hall2: {
@@ -46,26 +45,33 @@ const layouts = {
     },
     vip: {
       left: { rows: 5, cols: 4, startCol: 1, customRows: { E: [1, 2, 3] } },
-      right: { rows: 5, cols: 8, startCol: 5 },
+      right: { rows: 5, cols: 8, startCol: 5, disabledSeats: ["E5"] },
     },
   },
   hall3: {
     regular: {
       left: { rows: 12, cols: 6, startCol: 7, reverse: true },
-      right: { rows: 12, cols: 6, startCol: 1, reverse: true, customRows: { L: [1, 2, 3, 4, 5, 6] } },
+      right: {
+        rows: 12,
+        cols: 6,
+        startCol: 1,
+        reverse: true,
+        disabledSeats: ["L4", "L5", "L6"],
+        customRows: { L: [1, 2, 3, 4, 5, 6] },
+      },
     },
     vip: {
       left: { rows: 5, cols: 4, startCol: 9, customRows: { E: [10, 11, 12] }, reverse: true },
-      right: { rows: 5, cols: 8, startCol: 1, customRows: { E: [1, 2, 3, 4, 5, 6, 7, 8] } },
+      right: { rows: 5, cols: 8, startCol: 1, customRows: { E: [1, 2, 3, 4, 5, 6, 7, 8] }, disabledSeats: ["E8"], reverse: true },
     },
   },
 };
 
 const hallMap = { C1: "hall1", C2: "hall2", C3: "hall3" };
 const screenWidths = {
-  hall1: "w-[300px] xs:w-[350px] sm:w-[400px] md:w-[450px] lg:w-[500px]",
-  hall2: "w-[350px] xs:w-[400px] sm:w-[450px] md:w-[500px] lg:w-[550px]",
-  hall3: "w-[280px] xs:w-[320px] sm:w-[350px] md:w-[400px] lg:w-[450px]",
+  hall1: "w-[400px] sm:w-[450px] md:w-[500px]",
+  hall2: "w-[480px] sm:w-[520px] md:w-[580px]",
+  hall3: "w-[380px] sm:w-[430px] md:w-[470px]",
 };
 
 const SeatLayout = () => {
@@ -199,25 +205,29 @@ const SeatLayout = () => {
               {/* 📱 Mobile Layout */}
               <div className="w-full md:hidden overflow-x-auto pb-4">
                 <div className="flex gap-4 xs:gap-6 min-w-max px-2 xs:px-4">
-                  {Object.entries(hallLayout).map(([section, { rows, cols, startCol, customRows, reverse }]) => {
+                  {Object.entries(hallLayout).map(([section, { rows, cols, startCol, customRows, disabledSeats, reverse }]) => {
                     const seats = generateSeats(rows, cols, startCol, customRows, reverse);
                     return (
-                      <div key={section} className="flex flex-col items-center gap-2 xs:gap-3 flex-shrink-0 bg-gray-800/20 rounded-lg xs:rounded-xl p-3 xs:p-4 shadow-md min-w-[280px] xs:min-w-[320px]">
-                        <h3 className="text-base xs:text-lg font-medium text-amber-400 capitalize">{section} Side</h3>
-                        <div className="grid gap-1 xs:gap-2" style={{ gridTemplateColumns: `repeat(${cols}, minmax(28px, 1fr))` }}>
-                                                    {seats.map((seat) => {
+                      <div key={section} className="flex flex-col items-center gap-3 flex-shrink-0">
+                        <h3 className="text-lg font-medium text-amber-400 capitalize">{section} Side</h3>
+                        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${cols}, minmax(30px, 1fr))` }}>
+                          {seats.map((seat) => {
                             const isSelected = selectedSeats.includes(seat);
+                            const isDisabled = disabledSeats?.includes(seat) ?? false;
                             return (
                               <button
                                 key={seat}
-                                onClick={() => toggleSeat(seat)}
-                                className={`w-7 h-7 xs:w-8 xs:h-8 rounded-md border text-[10px] xs:text-[11px] font-medium transition-all duration-200 ${
+                                onClick={() => !isDisabled && toggleSeat(seat)}
+                                disabled={isDisabled}
+                                className={`w-7 h-7 sm:w-8 md:w-9 rounded-md border text-[10px] sm:text-xs md:text-sm font-medium transition-all duration-200 ${
                                   isSelected
                                     ? "bg-amber-400 text-black border-amber-400 scale-105"
+                                    : isDisabled
+                                    ? "bg-gray-700/50 text-gray-400 border-gray-600 cursor-not-allowed"
                                     : "bg-gray-700 border-gray-600 hover:bg-amber-500/80 hover:scale-105 text-white"
                                 }`}
                               >
-                                {seat}
+                                {!isDisabled && seat}
                               </button>
                             );
                           })}
@@ -228,11 +238,11 @@ const SeatLayout = () => {
                 </div>
               </div>
 
-              {/* 💻 MD Screens - Horizontal Scroll for Hall1 */}
-              {hallKey === "hall1" ? (
-                <div className="hidden md:flex lg:hidden w-full overflow-x-auto pb-4">
+              {/* 💻 Tablet Layout for Hall1 (horizontal scroll) */}
+              {hallKey === "hall1" && (
+                <div className="hidden md:flex lg:hidden overflow-x-auto w-full pb-4">
                   <div className="flex gap-4 min-w-max px-2">
-                    {Object.entries(hallLayout).map(([section, { rows, cols, startCol, customRows, reverse }]) => {
+                    {Object.entries(hallLayout).map(([section, { rows, cols, startCol, customRows, disabledSeats, reverse }]) => {
                       const seats = generateSeats(rows, cols, startCol, customRows, reverse);
                       return (
                         <div key={section} className="flex flex-col items-center gap-2 flex-shrink-0 bg-gray-800/20 rounded-lg p-3 min-w-[280px]">
@@ -240,17 +250,21 @@ const SeatLayout = () => {
                           <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${cols}, minmax(28px, 1fr))` }}>
                             {seats.map((seat) => {
                               const isSelected = selectedSeats.includes(seat);
+                              const isDisabled = disabledSeats?.includes(seat) ?? false;
                               return (
                                 <button
                                   key={seat}
-                                  onClick={() => toggleSeat(seat)}
+                                  onClick={() => !isDisabled && toggleSeat(seat)}
+                                  disabled={isDisabled}
                                   className={`w-7 h-7 rounded-md border text-[10px] font-medium transition-all duration-200 ${
                                     isSelected
                                       ? "bg-amber-400 text-black border-amber-400 scale-105"
+                                      : isDisabled
+                                      ? "bg-gray-700/50 text-gray-400 border-gray-600 cursor-not-allowed"
                                       : "bg-gray-700 border-gray-600 hover:bg-amber-500/80 hover:scale-105 text-white"
                                   }`}
                                 >
-                                  {seat}
+                                  {!isDisabled && seat}
                                 </button>
                               );
                             })}
@@ -260,41 +274,11 @@ const SeatLayout = () => {
                     })}
                   </div>
                 </div>
-              ) : (
-                // 💻 MD Screens - Original Grid Layout for other halls
-                <div className="hidden md:flex lg:hidden w-full mt-6 justify-center gap-4 px-4">
-                  {Object.entries(hallLayout).map(([section, { rows, cols, startCol, customRows, reverse }]) => {
-                    const seats = generateSeats(rows, cols, startCol, customRows, reverse);
-                    return (
-                      <div key={section} className="flex flex-col items-center gap-3 bg-gray-800/10 p-4 rounded-xl shadow-lg">
-                        <h3 className="text-lg font-semibold text-amber-400 capitalize">{section} Side</h3>
-                        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${cols}, minmax(30px, 1fr))` }}>
-                          {seats.map((seat) => {
-                            const isSelected = selectedSeats.includes(seat);
-                            return (
-                              <button
-                                key={seat}
-                                onClick={() => toggleSeat(seat)}
-                                className={`w-8 h-8 rounded-md border text-xs font-medium transition-all duration-200 ${
-                                  isSelected
-                                    ? "bg-amber-400 text-black border-amber-400 scale-105"
-                                    : "bg-gray-700 border-gray-600 hover:bg-amber-500/80 hover:scale-105 text-white"
-                                }`}
-                              >
-                                {seat}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
               )}
 
-              {/* 🖥️ Desktop Layout */}
+              {/* 💻 Desktop Layout */}
               <div className="hidden lg:flex gap-4 md:gap-6 xl:gap-8 2xl:gap-12 justify-center w-full mt-4">
-                {Object.entries(hallLayout).map(([section, { rows, cols, startCol, customRows, reverse }]) => {
+                {Object.entries(hallLayout).map(([section, { rows, cols, startCol, customRows, disabledSeats, reverse }]) => {
                   const seats = generateSeats(rows, cols, startCol, customRows, reverse);
                   return (
                     <div key={section} className="flex flex-col items-center gap-3 bg-gray-800/10 p-4 rounded-xl shadow-lg">
@@ -302,17 +286,21 @@ const SeatLayout = () => {
                       <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${cols}, minmax(32px, 1fr))` }}>
                         {seats.map((seat) => {
                           const isSelected = selectedSeats.includes(seat);
+                          const isDisabled = disabledSeats?.includes(seat) ?? false;
                           return (
                             <button
                               key={seat}
-                              onClick={() => toggleSeat(seat)}
+                              onClick={() => !isDisabled && toggleSeat(seat)}
+                              disabled={isDisabled}
                               className={`w-8 h-8 md:w-9 md:h-9 rounded-md border text-xs md:text-sm font-medium transition-all duration-200 ${
                                 isSelected
                                   ? "bg-amber-400 text-black border-amber-400 scale-105"
+                                  : isDisabled
+                                  ? "bg-gray-700/50 text-gray-400 border-gray-600 cursor-not-allowed"
                                   : "bg-gray-700 border-gray-600 hover:bg-amber-500/80 hover:scale-105 text-white"
                               }`}
                             >
-                              {seat}
+                              {!isDisabled && seat}
                             </button>
                           );
                         })}
@@ -371,4 +359,3 @@ const SeatLayout = () => {
 };
 
 export default SeatLayout;
-
