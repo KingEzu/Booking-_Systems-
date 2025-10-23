@@ -4,6 +4,18 @@ import googlePlay from './googlePlay.svg'
 import appStore from './appStore.svg'
 import screenImage from './screenImage.svg'
 import profile from './profile.png'
+import sunchips from './sunchips.jpg'
+import popcorn from './popcorn.jpg'
+import candyfloss from './candyfloss.jpg'
+import water from './water.jpg'
+import softdrink from './softdrink.jpg'
+import privateScreening from './privateScreening.jpg'
+import schoolPackage from './schoolPackage.jpg'
+import specialEvent from './specialEvent.jpg' 
+import compare from './compare.jpg'
+
+import businessPac from './businessPac.jpg'
+
 
 export const assets = {
     logo,
@@ -11,7 +23,20 @@ export const assets = {
     googlePlay,
     appStore,
     screenImage,
-    profile
+    profile,
+    sunchips,
+    popcorn,
+    candyfloss,
+    water,
+    softdrink,
+    privateScreening,
+    schoolPackage,
+    specialEvent,
+    compare,
+    businessPac
+
+
+  
 }
 
 export const dummyTrailers = [
@@ -74,6 +99,9 @@ export const dummyShowsData = [
         "vote_count": 15000,
         "runtime": 102,
         "language": "English",
+        "playGround": "PG-13",
+        
+        
     },
     {
         "_id": "1232546",
@@ -94,6 +122,7 @@ export const dummyShowsData = [
         "vote_count": 18000,
         "runtime": 103,
         "language": "English",
+        "playGround": "PG-13",
     },
     {
         "_id": "552524",
@@ -115,6 +144,7 @@ export const dummyShowsData = [
         "vote_count": 27500,
         "runtime": 108,
         "language": "English",
+        "playGround": "PG-13",
     },
     {
         "_id": "668489",
@@ -136,6 +166,7 @@ export const dummyShowsData = [
         "vote_count": 35960,
         "runtime": 107,
         "language": "English",
+        "playGround": "PG-13",
     },
     {
         "_id": "950387",
@@ -158,6 +189,7 @@ export const dummyShowsData = [
         "vote_count": 15225,
         "runtime": 101,
         "language": "English",
+        "playGround": "PG-13",
     },
     {
         "_id": "575265",
@@ -179,6 +211,7 @@ export const dummyShowsData = [
         "vote_count": 19885,
         "runtime": 170,
         "language": "English",
+        "playGround": "PG-13",
     },
     {
         "_id": "986056",
@@ -200,45 +233,46 @@ export const dummyShowsData = [
         "vote_count": 23569,
         "runtime": 127,
         "language": "English",
+        "playGround": "PG-13",
         
     }
 ]
 
 export const dummyDateTimeData = {
     "2025-10-19": [
-        { "time": "2025-07-24T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd1" },
-        { "time": "2025-07-24T03:00:00.000Z", "showId": "68395b407f6329be2bb45bd2" },
-        { "time": "2025-07-24T05:00:00.000Z", "showId": "68395b407f6329be2bb45bd3" }
+        { "time": "2025-07-24T01:00:00.000Z", "regular": "200ETB", "Vip": "400", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bd1" },
+        { "time": "2025-07-24T03:00:00.000Z", "regular": "240ETB", "Vip": "260", "type": "3D", "Hall": "C1","showId": "68395b407f6329be2bb45bd2" },
+        { "time": "2025-07-24T05:00:00.000Z", "regular": "200ETB", "Vip": "400", "type": "2D", "Hall": "C2","showId": "68395b407f6329be2bb45bd3" }
     ],
        "2025-10-19": [
-        { "time": "2025-07-24T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd1" },
-        { "time": "2025-07-24T03:00:00.000Z", "showId": "68395b407f6329be2bb45bd2" },
-        { "time": "2025-07-24T05:00:00.000Z", "showId": "68395b407f6329be2bb45bd3" }
+        { "time": "2025-07-24T01:00:00.000Z", "regular": "200ETB", "Vip": "400", "type": "2D", "Hall": "C3", "showId": "68395b407f6329be2bb45bd1" },
+        { "time": "2025-07-24T03:00:00.000Z", "regular": "240ETB", "Vip": "260", "type": "3D", "Hall": "C2",  "showId": "68395b407f6329be2bb45bd2" },
+        { "time": "2025-07-24T05:00:00.000Z", "regular": "200ETB", "Vip": "400", "type": "2D", "Hall": "C1", "showId": "68395b407f6329be2bb45bd3" }
     ],   
     "2025-10-19": [
-        { "time": "2025-07-24T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd1" },
-        { "time": "2025-07-24T03:00:00.000Z", "showId": "68395b407f6329be2bb45bd2" },
-        { "time": "2025-07-24T05:00:00.000Z", "showId": "68395b407f6329be2bb45bd3" }
+        { "time": "2025-07-24T01:00:00.000Z", "regular": "240ETB", "Vip": "260", "type": "3D", "Hall": "C3", "showId": "68395b407f6329be2bb45bd1" },
+        { "time": "2025-07-24T03:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C1", "showId": "68395b407f6329be2bb45bd2" },
+        { "time": "2025-07-24T05:00:00.000Z", "regular": "240ETB", "Vip": "260", "type": "3D", "Hall": "C2", "showId": "68395b407f6329be2bb45bd3" }
     ],  
     "2025-10-19": [
-        { "time": "2025-07-24T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd1" },
-        { "time": "2025-07-24T03:00:00.000Z", "showId": "68395b407f6329be2bb45bd2" },
-        { "time": "2025-07-24T05:00:00.000Z", "showId": "68395b407f6329be2bb45bd3" }
+        { "time": "2025-07-24T01:00:00.000Z", "regular": "240ETB", "Vip": "260", "type": "3D", "Hall": "C1",   "showId": "68395b407f6329be2bb45bd1" },
+        { "time": "2025-07-24T03:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3",   "showId": "68395b407f6329be2bb45bd2" },
+        { "time": "2025-07-24T05:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C2",   "showId": "68395b407f6329be2bb45bd3" }
     ],
     "2025-10-11": [
-        { "time": "2025-07-25T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd4" },
-        { "time": "2025-07-25T03:00:00.000Z", "showId": "68395b407f6329be2bb45bd5" },
-        { "time": "2025-07-25T05:00:00.000Z", "showId": "68395b407f6329be2bb45bd6" }
+        { "time": "2025-07-25T01:00:00.000Z", "regular": "240ETB", "Vip": "260", "type": "3D", "Hall": "C3","showId": "68395b407f6329be2bb45bd4" },
+        { "time": "2025-07-25T03:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bd5" },
+        { "time": "2025-07-25T05:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bd6" }
     ],
     "2025-10-12": [
-        { "time": "2025-07-26T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd7" },
-        { "time": "2025-07-26T03:00:00.000Z", "showId": "68395b407f6329be2bb45bd8" },
-        { "time": "2025-07-26T05:00:00.000Z", "showId": "68395b407f6329be2bb45bd9" }
+        { "time": "2025-07-26T01:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bd7" },
+        { "time": "2025-07-26T03:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bd8" },
+        { "time": "2025-07-26T05:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bd9" }
     ],
     "2025-10-13": [
-        { "time": "2025-07-27T01:00:00.000Z", "showId": "68395b407f6329be2bb45bda" },
-        { "time": "2025-07-27T03:00:00.000Z", "showId": "68395b407f6329be2bb45bdb" },
-        { "time": "2025-07-27T05:00:00.000Z", "showId": "68395b407f6329be2bb45bdc" }
+        { "time": "2025-07-27T01:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bda" },
+        { "time": "2025-07-27T03:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bdb" },
+        { "time": "2025-07-27T05:00:00.000Z", "regular": "200ETB", "Vip": "240", "type": "2D", "Hall": "C3","showId": "68395b407f6329be2bb45bdc" }
     ]
 }
 
@@ -355,6 +389,58 @@ export const dummyBookingData = [
     },
 ]
 
+export const snacksData = [
+  {
+    id: 1,
+    name: 'Sun Chips',
+    image: sunchips,
+    price: 65, // in ETB or your preferred currency
+    desc: 'Crispy multigrain chips, lightly salted and full of flavor.',
+  },
+    {
+    id: 2,
+    name: 'Big Sun Chips',
+    image: sunchips,
+    price: 110, // in ETB or your preferred currency
+    desc: 'Crispy multigrain chips, lightly salted and full of flavor.',
+  },
+  {
+    id: 3,
+    name: 'Popcorn',
+    image: popcorn,
+    price: 170,
+    desc: 'Freshly popped, buttery and warm cinema-style popcorn.',
+  },
+  {
+    id: 4,
+    name: 'Candy Floss',
+    image: candyfloss,
+    price: 60,
+    desc: 'Sweet and fluffy cotton candy in pink and blue colors.',
+  },
+{
+  id: 5,
+  name: 'Water (500ml)',
+  image: water,
+  price: 30,
+  desc: '500ml bottled mineral water to keep you refreshed.',
+},
+{
+  id: 6,
+  name: 'Water (1L)',
+  image: water,
+  price: 35,
+  desc: '1L bottled mineral water to keep you refreshed for longer.',
+},
+
+  {
+    id: 7,
+    name: 'Soft Drink',
+    image: softdrink,
+    price: 70,
+    desc: 'Chilled soda choices like Coke, Fanta, Sprite, Pepsi or Mirinda.',
+  },
+];
 
 
 export const dummyUpcomingMovies = [
@@ -370,6 +456,9 @@ export const dummyUpcomingMovies = [
     ],
     runtime: 102,
     vote_average: 6.4,
+    "language": "English",
+
+
   },
   {
     _id: "1002",
@@ -382,6 +471,7 @@ export const dummyUpcomingMovies = [
     ],
     runtime: 103,
     vote_average: 6.4,
+    "language": "English",
   },
   {
     _id: "1003",
@@ -395,6 +485,7 @@ export const dummyUpcomingMovies = [
     ],
     runtime: 108,
     vote_average: 7.1,
+    "language": "English",
   },
   {
     _id: "1004",
@@ -408,6 +499,7 @@ export const dummyUpcomingMovies = [
     ],
     runtime: 127,
     vote_average: 7.4,
+    "language": "English",
   },
    
   
