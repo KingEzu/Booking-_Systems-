@@ -22,7 +22,7 @@ const DateSelect = ({dateTime, id}) => {
     }
 
     return (
-        <div id='dateSelect' className='mt-30'>
+        <div id='dateSelect' className='mt-30 mb-10'>
           
           <BlurCircle top='-40px' right='-40px' />
           <BlurCircle bottom='-40px' left='-40px' />
@@ -35,7 +35,7 @@ const DateSelect = ({dateTime, id}) => {
                         choose date
                     </p>
                     <div className='flex items-center gap-6 text-sm mt-5'>
-                        <ChevronLeftIcon width={28}/>
+                        {/*<ChevronLeftIcon width={28}/>*/}
                         <span className='grid grid-cols-3 md:flex flex-wrap md:max-w-lg gap-4'>
                             {
                                 Object.keys(dateTime).map((date)=>(
@@ -47,7 +47,7 @@ const DateSelect = ({dateTime, id}) => {
                                            
                             ))}
                             </span>
-                            <ChevronRightIcon width={28}/>         
+                          {/*  <ChevronRightIcon width={28}/> */}       
                                    
                               
                         </div>
