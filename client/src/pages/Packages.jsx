@@ -1,90 +1,92 @@
-import React, { useState } from "react";
-import { 
-  Briefcase, 
-  Film, 
-  School, 
-  PartyPopper, 
-  Building2, 
-  Popcorn 
-} from "lucide-react";
-import { assets } from "../assets/assets";
+import React, { useState } from 'react';
+import CinemaServices from '../components/CinemaServices';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
-const packagesData = [
+const faqs = [
   {
-    icon: <Briefcase className="w-10 h-10 text-primary" />,
-    title: "Business Meetings",
-    desc: "Bored of the same old meeting rooms? Host your next meeting at Century Cinema...",
-    image: assets.businessPac,
-    schedule: "Mon-Fri 9am - 6pm"
+    question: "How can I book a private screening?",
+    answer: "You can reserve through our 'Reserve Now' button under each package, or visit our box office to schedule your event. We'll help you customize the screening to your needs."
   },
   {
-    icon: <Film className="w-10 h-10 text-primary" />,
-    title: "Private Screenings",
-    desc: "Now booking private rentals for groups of 200 or more! ...",
-    image: assets.privateScreening,
-    schedule: "Available Daily"
+    question: "Do you offer group discounts?",
+    answer: "Yes! We provide special discounts for schools, businesses, and large groups. Contact our team to learn more about group rates and available packages."
   },
   {
-    icon: <School className="w-10 h-10 text-primary" />,
-    title: "School Packages",
-    desc: "All kids love going to the movies! ...",
-    image: assets.schoolPackage,
-    schedule: "Mon-Fri 8am - 2pm"
+    question: "Can I bring outside food or drinks?",
+    answer: "Outside food and drinks are not allowed. However, we offer a wide range of snacks, soft drinks, and popcorn packages available at the concession stand."
   },
   {
-    icon: <PartyPopper className="w-10 h-10 text-primary" />,
-    title: "Special Events & Parties",
-    desc: "Looking for the perfect venue to celebrate ...",
-    image: assets.specialEvent,
-    schedule: "Weekends & Holidays"
+    question: "Do you host birthday parties?",
+    answer: "Absolutely! Our birthday package includes private screening options, decorations, and catering. You can also customize your experience."
   },
   {
-    icon: <Building2 className="w-10 h-10 text-primary" />,
-    title: "Corporate Celebrations",
-    desc: "Appreciate your valued clients ...",
-    image: assets.compare,
-    schedule: "Mon-Sat 10am - 8pm"
-  },
+    question: "Is there parking available at the cinema?",
+    answer: "Yes, we have free on-site parking for all visitors, including reserved spaces for private events."
+  }
 ];
 
-const Packages = () => {
-  const [activeIndex, setActiveIndex] = useState(null); // tracks which package is expanded
+const FAQSection = () => {
+  const [openIndex, setOpenIndex] = useState(null);
 
-  const handleClick = (index) => {
-    setActiveIndex(activeIndex === index ? null : index); // toggle expand/collapse
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <section className="py-10 px-5 md:px-20">
-      <h2 className="text-3xl font-bold text-center mb-10">Our Packages</h2>
-      <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {packagesData.map((pkg, index) => (
+    <section className="py-20 px-6 md:px-16 lg:px-24 bg-gradient-to-b from-gray-900 to-gray-950 text-gray-100">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-primary tracking-wide mb-4">
+          Frequently Asked Questions
+        </h2>
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          Find quick answers to the most common questions about our packages and cinema services.
+        </p>
+      </div>
+
+      <div className="max-w-3xl mx-auto space-y-4">
+        {faqs.map((faq, index) => (
           <div
             key={index}
-            onClick={() => handleClick(index)}
-            className="cursor-pointer relative rounded-lg overflow-hidden border shadow hover:shadow-lg transition"
+            className="border border-gray-800 rounded-2xl p-5 bg-gray-900 hover:border-primary transition-all duration-300"
           >
-            {/* Image + Title */}
-            <img
-              src={pkg.image}
-              alt={pkg.title}
-              className="w-full h-56 object-cover"
-            />
-            <div className="p-4 bg-primary/10">
-              <h3 className="text-xl font-semibold">{pkg.title}</h3>
-            </div>
+            <button
+              onClick={() => toggleFAQ(index)}
+              className="flex justify-between items-center w-full text-left"
+            >
+              <span className="text-lg font-semibold text-gray-200">
+                {faq.question}
+              </span>
+              {openIndex === index ? (
+                <ChevronUp className="text-primary w-6 h-6" />
+              ) : (
+                <ChevronDown className="text-primary w-6 h-6" />
+              )}
+            </button>
 
-            {/* Expanded content */}
-            {activeIndex === index && (
-              <div className="p-4 bg-white border-t">
-                <p className="text-gray-700 mb-2">{pkg.desc}</p>
-                <p className="text-gray-500 font-medium">Schedule: {pkg.schedule}</p>
-              </div>
-            )}
+            <div
+              className={`overflow-hidden transition-all duration-500 ${
+                openIndex === index ? "max-h-40 mt-3" : "max-h-0"
+              }`}
+            >
+              <p className="text-gray-400 text-base leading-relaxed">
+                {faq.answer}
+              </p>
+            </div>
           </div>
         ))}
       </div>
     </section>
+  );
+};
+
+const Packages = () => {
+  return (
+    <div id="CinemaServices" className="mt-0">
+      <CinemaServices />
+
+      {/* FAQ Section */}
+      <FAQSection />
+    </div>
   );
 };
 
