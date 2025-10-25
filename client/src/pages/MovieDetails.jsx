@@ -144,13 +144,13 @@ const MovieDetails = () => {
 
       <div className="w-full overflow-x-auto no-scrollbar mt-4">
         {/* inline-flex keeps the row tidy and prevents expanding parent width */}
-        <div className="inline-flex gap-6 px-4">
+        <div className="inline-flex gap-6 px-6">
           {show.movie.casts.slice(0, 10).map((cast, idx) => (
             <div key={idx} className="flex flex-col items-center text-center flex-shrink-0">
               <img
                 src={cast.profile_path}
                 alt={cast.name}
-                className="rounded-full h-24 w-24 sm:h-24 sm:w-24 md:h-28 md:w-28 lg:h-32 lg:w-32 object-cover"
+                className="rounded-full h-24 w-24 sm:h-24 sm:w-24 md:h-28 md:w-28 lg:h-32 lg:w-32 object-cover border-primary-dull border-2"
               />
               <p className="font-medium text-xs mt-3">{cast.name}</p>
             </div>
