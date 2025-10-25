@@ -19,11 +19,14 @@ const Home = () => {
             
             <UpcomingSection />
 
-            {/*<CinemaPromo />
+            {/*<CinemaPromo />/>*/}
          
-            <TraillerSection />*/}
+        
 
                 <CinemaServices/>
+
+
+                    <TraillerSection />
 
         </div>
     )
