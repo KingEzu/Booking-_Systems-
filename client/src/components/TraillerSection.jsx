@@ -8,7 +8,7 @@ const TrailerSection = () => {
   const [currentTrailer, setCurrentTrailer] = useState(dummyTrailers[0]);
 
   return (
-    <div className="px-6 md:px-16 lg:px-24 xl:px-44 py-20 overflow-hidden">
+    <div className="px-6 md:px-16 lg:px-24 xl:px-44 py-20 overflow-hidden from-gray-900 via-black to-gray-900">
       <p className="text-gray-300 font-medium text-lg max-w-[960px] mx-auto">
         Trailers
       </p>
@@ -29,7 +29,7 @@ const TrailerSection = () => {
       </div>
 
       {/* Thumbnails */}
-      <div className="group grid grid-cols-4 gap-4 md:gap-8 mt-8 max-w-3xl mx-auto">
+      <div className="group grid grid-cols-4 gap-4 md:gap-8 mt-8 max-w-3xl mx-auto ">
         {dummyTrailers.map((trailer) => (
           <div
             key={trailer.image}
