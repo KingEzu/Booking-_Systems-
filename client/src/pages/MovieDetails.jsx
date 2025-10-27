@@ -49,7 +49,7 @@ const MovieDetails = () => {
 
   if (notFound && !show) {
     return (
-      <div className="flex flex-col items-center justify-center mt-40 mb-40 text-center px-10 py-12 bg-transparent rounded-2xl shadow-lg max-w-md mx-auto">
+      <div className="flex flex-col items-center justify-center mt-40 mb-40 text-center px-10 py-12 bg-transparent  rounded-2xl shadow-lg max-w-md mx-auto">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-16 w-16 text-amber-800/90 mb-4"
@@ -76,14 +76,14 @@ const MovieDetails = () => {
 
   return (
     // page-level overflow hidden prevents page-wide horizontal scrolling
-    <div className="px-6 md:px-16 lg:px-40 pt-30 md:pt-50 overflow-x-hidden">
+    <div className="relative w-full overflow-y-hidden px-6 md:px-56 lg:px-30 pt-30  md:pt-50 overflow-x-hidden bg-gradient-to-b from-gray-900 to-gray-950">
       {/* Movie details content */}
-      <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto w-full">
+      <div className="flex flex-col md:flex-row gap-8  max-w-6xl mx-auto w-full">
         {/* poster - ensure it can't overflow */}
         <img
           src={movie.poster_path}
           alt={movie.title}
-          className="max-md:mx-auto rounded-xl h-[420px] w-full md:w-[320px] object-cover max-w-full"
+          className="max-md:mx-auto mt-20 rounded-xl h-[420px] w-full md:w-[320px] object-cover max-w-full"
         />
 
         {/* details column: min-w-0 + overflow-hidden to prevent its children from forcing page width */}
@@ -139,24 +139,54 @@ const MovieDetails = () => {
         </div>
       </div>
 
-      {/* Cast Section - ONLY this area scrolls horizontally */}
-      <p className="text-lg font-medium mt-20">Cast</p>
-
-      <div className="w-full overflow-x-auto no-scrollbar mt-4">
-        {/* inline-flex keeps the row tidy and prevents expanding parent width */}
-        <div className="inline-flex gap-6 px-6">
-          {show.movie.casts.slice(0, 10).map((cast, idx) => (
-            <div key={idx} className="flex flex-col items-center text-center flex-shrink-0">
-              <img
-                src={cast.profile_path}
-                alt={cast.name}
-                className="rounded-full h-24 w-24 sm:h-24 sm:w-24 md:h-28 md:w-28 lg:h-32 lg:w-32 object-cover border-primary-dull border-2"
-              />
-              <p className="font-medium text-xs mt-3">{cast.name}</p>
-            </div>
-          ))}
-        </div>
+      <div
+  className="
+    relative
+    mt-4 w-full
+    overflow-x-auto
+    sm:overflow-x-auto
+    md:overflow-x-auto
+    lg:overflow-x-auto
+    xl:overflow-x-hidden
+  "
+>
+  <div
+    className="
+      flex gap-6 px-6
+      sm:inline-flex
+      md:inline-flex
+      lg:inline-flex
+      xl:flex-wrap
+      justify-start
+      items-center
+      no-scrollbar
+    "
+  >
+    {show.movie.casts.slice(0, 10).map((cast, idx) => (
+      <div
+        key={idx}
+        className="flex flex-col items-center text-center flex-shrink-0"
+      >
+        <img
+          src={cast.profile_path}
+          alt={cast.name}
+          className="
+            rounded-full
+            h-24 w-24
+            sm:h-24 sm:w-24
+            md:h-28 md:w-28
+            lg:h-32 lg:w-32
+            object-cover border-primary-dull border-2
+          "
+        />
+        <p className="font-medium text-xs mt-3">{cast.name}</p>
       </div>
+    ))}
+  </div>
+</div>
+
+
+
 
       {/* Date Selection */}
       <div id="dateSelect" className="mt-10">
