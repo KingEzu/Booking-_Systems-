@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom"; // Added useNavigate and useParams
 import { snacksData } from "../assets/assets";
+import { ArrowLeftIcon } from "lucide-react"; // Added ArrowLeftIcon
 
 const OrderSnacks = () => {
   const location = useLocation();
-  const { selectedSeats = [], category, hall, pricePerSeat } = location.state || {};
+  const navigate = useNavigate();
+  const { id, date } = useParams(); // Added useParams
+  const { selectedSeats = [], category, hall, pricePerSeat, prevTime } = location.state || {};
 
   const [quantities, setQuantities] = useState({});
   const [activeCard, setActiveCard] = useState(null);
@@ -42,19 +45,50 @@ const OrderSnacks = () => {
   const waterItems = drinks.filter((item) => item.name === "Water");
   const softDrinks = drinks.filter((item) => item.name === "Soft Drink");
 
+  // Handle back to seats
+  const handleBackToSeats = () => {
+    navigate(`/Movies/${id}/${date}`, {
+      state: {
+        prevSelectedSeats: selectedSeats,
+        prevCategory: category,
+        prevTime: prevTime,
+      },
+    });
+  };
+
   return (
-    <div className="p-6 mt-20 text-center text-white">
+    <div className="p-6 mt-30  text-center text-white">
+      {/* Back to Seats Button */}
+      <div
+        className="flex items-center mb-4 cursor-pointer justify-start max-w-6xl mx-auto"
+        onClick={handleBackToSeats}
+      >
+        <ArrowLeftIcon className="w-10 h-10 animate-bounce transition  text-primary mr-2" />
+      
+      </div>
+
       {/* Header */}
       <h2 className="text-2xl font-bold mb-2 text-primary">
         🎟️ {hall || "Hall"} — {category?.toUpperCase() || ""}
       </h2>
-      <p className="text-lg mb-6 text-gray-300">
-        {selectedSeats.length} seat(s) selected — Br {(seatPrice * selectedSeats.length).toLocaleString()}
-      </p>
+
+      {/* Selected Seats */}
+      {selectedSeats.length > 0 ? (
+        <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-lg font-medium text-white">
+            {selectedSeats.length} seat{selectedSeats.length > 1 ? "s" : ""} {" "} {selectedSeats.join(", ")}
+          </span>
+          <span className="text-primary-dull text-5xl">
+            Br {(seatPrice * selectedSeats.length).toLocaleString()}
+          </span>
+        </div>
+      ) : (
+        <p className="text-gray-400 mb-4 italic">No seats selected yet</p>
+      )}
 
       {/* 🍿 Snacks */}
-      <h2 className="text-2xl font-bold mb-4 text-primary">🍿 Snacks</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mb-8">
+      <h2 className="text-2xl font-bold mb-4 text-primary-dul">🍿 Snacks</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mb-8 max-w-6xl mx-auto">
         {snacks.map((item) => (
           <div
             key={item.id}
@@ -95,7 +129,7 @@ const OrderSnacks = () => {
 
       {/* 🥤 Drinks */}
       <h2 className="text-2xl font-bold mb-4 text-primary">🥤 Drinks</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mb-8 max-w-6xl mx-auto">
         {/* Water card */}
         {waterItems.length > 0 && (
           <div
