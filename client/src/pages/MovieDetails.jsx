@@ -189,7 +189,7 @@ const MovieDetails = () => {
 
 
       {/* Date Selection */}
-      <div id="dateSelect" className="mt-15 xl:px-75">
+      <div id="dateSelect" className="mt-5 lg:px-15 py-5 xl:px-75">
         <DateSelect dateTime={show.dateTime} id={id} />
       </div>
     </div>
