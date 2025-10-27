@@ -13,7 +13,7 @@ import privateScreening from './privateScreening.jpg'
 import schoolPackage from './schoolPackage.jpg'
 import specialEvent from './specialEvent.jpg' 
 import compare from './compare.jpg'
-
+import Party from './Party.jpg'
 import businessPac from './businessPac.jpg'
 
 
@@ -33,6 +33,7 @@ export const assets = {
     schoolPackage,
     specialEvent,
     compare,
+    Party,
     businessPac
 
 
@@ -359,6 +360,10 @@ export const dummyBookingData = [
         },
         "amount": 98,
         "bookedSeats": ["D1", "D2"],
+        "Snacks": [
+            { name: "Popcorn", quantity: 1, price: 170 },
+            { name: "Soft Drink", quantity: 2, price: 140 },
+        ],
         "isPaid": false,
     },
     {
@@ -372,6 +377,9 @@ export const dummyBookingData = [
         },
         "amount": 49,
         "bookedSeats": ["A1"],
+        "Snacks": [
+            { name: "Popcorn", quantity: 1},
+        ],
         "isPaid": true,
     },
     {
@@ -385,6 +393,10 @@ export const dummyBookingData = [
         },
         "amount": 147,
         "bookedSeats": ["A1", "A2","A3"],
+        "Snacks": [
+            { name: "Popcorn", quantity: 1 },
+           ,
+        ],
         "isPaid": true,
     },
 ]
