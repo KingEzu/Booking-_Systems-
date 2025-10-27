@@ -404,6 +404,7 @@ export const dummyBookingData = [
 export const snacksData = [
   {
     id: 1,
+    type: 'Snack',
     name: 'Sun Chips',
     image: sunchips,
     price: 65, // in ETB or your preferred currency
@@ -411,6 +412,7 @@ export const snacksData = [
   },
     {
     id: 2,
+    type: 'Snack',   
     name: 'Big Sun Chips',
     image: sunchips,
     price: 110, // in ETB or your preferred currency
@@ -418,6 +420,7 @@ export const snacksData = [
   },
   {
     id: 3,
+    type: 'Snack',
     name: 'Popcorn',
     image: popcorn,
     price: 170,
@@ -425,6 +428,7 @@ export const snacksData = [
   },
   {
     id: 4,
+    type: 'Snack',
     name: 'Candy Floss',
     image: candyfloss,
     price: 60,
@@ -432,6 +436,7 @@ export const snacksData = [
   },
 {
   id: 5,
+  type: 'Drink',
   name: 'Water (500ml)',
   image: water,
   price: 30,
@@ -439,6 +444,7 @@ export const snacksData = [
 },
 {
   id: 6,
+  type: 'Drink',
   name: 'Water (1L)',
   image: water,
   price: 35,
@@ -447,6 +453,7 @@ export const snacksData = [
 
   {
     id: 7,
+    type: 'Drink',
     name: 'Soft Drink',
     image: softdrink,
     price: 70,
