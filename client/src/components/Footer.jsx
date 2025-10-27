@@ -3,8 +3,9 @@ import { assets } from '../assets/assets'
 import { Phone, MessageSquareHeart } from 'lucide-react'
 
 const Footer = () => {
+  const hasNavbar = location.pathname === '/' || location.pathname === '/home'
   return (
-    <footer className="px-6 md:px-16 mt-1 lg:px-24 xl:px-32 pt-8 w-full bg-gradient-to-b from-[#014d4e] to-[#003333]  relative text-gray-50">
+    <footer className="px-6 md:px-16 mt-2 lg:px-24 xl:px-32 pt-8 w-full bg-gradient-to-b from-[#014d4e] to-[#003333]  relative text-gray-50">
       {/* Row 1: Logo and Description */}
       <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-amber-500/30 pb-6">
         <div className="md:max-w-96  ">
