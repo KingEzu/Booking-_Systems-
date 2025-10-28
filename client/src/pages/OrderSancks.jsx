@@ -115,7 +115,7 @@ const OrderSnacks = () => {
             {selectedSeats.length} seat{selectedSeats.length > 1 ? "s" : ""} {selectedSeats.join(", ")}
           </span>
           <span className="text-primary-dull text-5xl">
-            Br {(seatPrice * selectedSeats.length).toLocaleString()}
+            Br {totalPrice.toLocaleString()}
           </span>
         </div>
       ) : (
