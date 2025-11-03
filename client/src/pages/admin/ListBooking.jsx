@@ -30,6 +30,7 @@ const ListBooking = () => {
               <th className="p-2 font-medium">Movie Name</th>
               <th className="p-2 font-medium">Show Time</th>
               <th className="p-2 font-medium">Seats</th>
+              <th className='p-2 font-medium'>Snacks</th>
               <th className="p-2 font-medium">Amount</th>
             </tr>
           </thead>
@@ -46,10 +47,23 @@ const ListBooking = () => {
                   {dateFormat(item.show.showDateTime)}
                 </td>
                 <td className="p-2">
-                  {Object.keys(item.bookedSeats)
-                    .map((seat) => seat)
-                    .join(', ')}
+                 {
+                    Object.keys(item.bookedSeats).map(seat => item.bookedSeats[seat]).join(", ")
+                 }
                 </td>
+                <td className="p-2">
+                  {item.Snacks && item.Snacks.length > 0 ? (
+                    item.Snacks.map((snack, index) => (
+                      <div key={index}>
+                        {snack.name} × {snack.quantity}
+                      </div>
+                    ))
+                  ) : (
+                    <span>No snacks</span>
+                  )}
+                </td>
+
+
                 <td className="p-2">
                   {currency} {item.amount}
                 </td>
