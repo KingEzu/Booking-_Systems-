@@ -10,6 +10,13 @@ import Favorite from './pages/Favorite'
 import { Toaster } from 'react-hot-toast'
 import Footer from './components/Footer'
 import OrderSnacks from './pages/OrderSancks.jsx'
+import Packages from './pages/Packages.jsx'
+import Layout from './pages/admin/Layout.jsx'
+import Dashboard from './pages/admin/Dashboard.jsx'
+import AddShows from './pages/admin/AddShows.jsx'
+import ListShows from './pages/admin/ListShows.jsx'
+import ListBooking from './pages/admin/ListBooking.jsx'
+import ManageSnacks from './pages/admin/ManagSnacks.jsx'
 
 const App = () => {
 
@@ -28,8 +35,17 @@ const App = () => {
         <Route path='/Movies/:id/:date/:Snacks' element={<OrderSnacks />}/>
         <Route path='/my-bookings' element={<MyBookings />}/>
         <Route path='/favorite' element={<Favorite/>}/>
+        <Route path='/packages' element={<Packages />}/>
+
+      <Route path='/admin/*' element={<Layout/>}>
+      <Route index element={<Dashboard/>}/>
+      <Route path='add-shows' element={<AddShows/>}/>
+      <Route path='list-shows' element={<ListShows/>}/>
+      <Route path='list-booking' element={<ListBooking/>}/>
+       <Route path="ManageSnacks" element={<ManageSnacks />} />
 
 
+      </Route>
 
 
       </Routes>
