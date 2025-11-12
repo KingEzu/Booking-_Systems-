@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { type } from "os";
+
 
 
 const userSchema = new mongoose.Schema({
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String, required: true
-    },
+    }
 })
 
 const User = mongoose.model('User', userSchema)
