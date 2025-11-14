@@ -1,4 +1,5 @@
 import axios from "axios"
+import { err } from "inngest/types";
 
 export const getNowPlayingMovies = async (req, res)=>{
     try{
@@ -17,4 +18,19 @@ export const getNowPlayingMovies = async (req, res)=>{
 
     }
     
+}
+
+
+//api to add a new show
+
+export const addShow = async (req, res) =>{
+    try{
+        const {movieId, showInput, ShowPrice} =req.body
+
+        let movie = await Movie.findById(movieId)
+
+    }catch(error){
+        console.error(error);
+        res.json({success: false, message:error.message})
+    }
 }
