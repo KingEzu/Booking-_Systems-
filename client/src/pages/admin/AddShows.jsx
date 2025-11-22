@@ -1,70 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import { dummyShowsData } from '../../assets/assets';
-import Title from './Title';
-import { CheckIcon, StarIcon, TrashIcon } from '@heroicons/react/16/solid';
-import Loading from '../../components/Loading'; 
-import { kConverter } from '../../lib/kConverter';
+import React, { useEffect, useState } from "react";
+import Title from "./Title";
+import { CheckIcon, StarIcon, TrashIcon } from "@heroicons/react/16/solid";
+import Loading from "../../components/Loading";
+import { kConverter } from "../../lib/kConverter";
 import toast from "react-hot-toast";
-import { useAppContext } from '../../context/AppContext';
+import { useAppContext } from "../../context/AppContext";
 
 const AddShows = () => {
+  const { axios, getToken, user, image_base_url } = useAppContext();
+  const currency = import.meta.env.VITE_CURENCY;
 
-  const {axios, getToken, user} = useAppContext()
-
-  const currency = import.meta.env.VITE_CURENCY; 
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState(null); // store {id, title}
   const [dateTimeSelection, setDateTimeSelection] = useState({});
-  const [dateTimeInput, setDateTimeInput] = useState('');
-  const [showPrice, setShowPrice] = useState('');
-  const [selectedHall, setSelectedHall] = useState('');
+  const [dateTimeInput, setDateTimeInput] = useState("");
+  const [regularPrice, setRegularPrice] = useState("");
+  const [vipPrice, setVipPrice] = useState("");
+  const [selectedHall, setSelectedHall] = useState("");
+  const [movieType, setMovieType] = useState("2D");
+  const [addingShow, setAddingShow] = useState(false);
 
   const hallOptions = ["C1", "C2", "C3"];
+  const typeOptions = ["2D", "3D"];
 
+  // Fetch now playing movies
   const fetchNowPlayingMovies = async () => {
-    try{
-
-      const { data } = await axios.get('api/show/now-playing', {
-        headers: {Authorization: `Bearer ${await getToken()}` }
-      } 
-        
-      )
-      if(data.success){
-        setNowPlayingMovies(data.movies);
-      }
-
-    }catch(error){
-      console.error('error fetching movies:', error);
+    try {
+      const { data } = await axios.get("/api/show/now-playing", {
+           headers: { Authorization: `Bearer ${await getToken()}` }
+,
+      });
+      if (data.success) setNowPlayingMovies(data.movies);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
     }
-    
   };
 
   useEffect(() => {
-    fetchNowPlayingMovies();
-  }, []);
+    if (user) fetchNowPlayingMovies();
+  }, [user]);
 
+  // Handle date-time input
   const handleDateTimeChange = (e) => {
     const value = e.target.value;
     const now = new Date();
     const selected = new Date(value);
-
     if (selected < now) {
       toast.error("You cannot select a past time!");
       return;
     }
-
     setDateTimeInput(value);
   };
 
+  // Add date-time to selected hall
   const handleDateTimeAdd = () => {
-    if (!selectedHall) {
-      toast.error("Please select a hall!");
-      return;
-    }
-    if (!dateTimeInput) {
-      toast.error("Please select a date and time!");
-      return;
-    }
+    if (!selectedHall) return toast.error("Please select a hall!");
+    if (!dateTimeInput) return toast.error("Please select a date and time!");
 
     const [date, time] = dateTimeInput.split("T");
     if (!date || !time) return;
@@ -72,12 +63,10 @@ const AddShows = () => {
     setDateTimeSelection((prev) => {
       const hallData = prev[selectedHall] || {};
       const times = hallData[date] || [];
-
       if (times.includes(time)) {
         toast.error("This time already exists for the selected hall!");
         return prev;
       }
-
       return {
         ...prev,
         [selectedHall]: {
@@ -87,56 +76,111 @@ const AddShows = () => {
       };
     });
 
-    setDateTimeInput(''); // optional: clear input after adding
+    setDateTimeInput("");
   };
 
+  // Remove specific time
   const handleRemoveTime = (hall, date, time) => {
     setDateTimeSelection((prev) => {
       const hallData = { ...prev[hall] };
       const filteredTimes = hallData[date].filter((t) => t !== time);
-
-      if (filteredTimes.length === 0) {
-        delete hallData[date];
-      } else {
-        hallData[date] = filteredTimes;
-      }
-
+      if (filteredTimes.length === 0) delete hallData[date];
+      else hallData[date] = filteredTimes;
       const updated = { ...prev, [hall]: hallData };
       if (Object.keys(hallData).length === 0) delete updated[hall];
-
       return updated;
     });
   };
 
-  return nowPlayingMovies.length > 0 ? (
+  // Submit show
+  const handleSubmit = async () => {
+    try {
+      setAddingShow(true);
+
+      if (!selectedMovie) return toast.error("Please select a movie!");
+      if (!regularPrice || !vipPrice)
+        return toast.error("Enter both regular and VIP prices");
+      if (Object.keys(dateTimeSelection).length === 0)
+        return toast.error("Add at least one showtime");
+
+      // Build showsInput
+      const showsInput = Object.entries(dateTimeSelection).flatMap(
+        ([hall, hallDates]) =>
+          Object.entries(hallDates).map(([date, times]) => ({
+            hall,
+            date,
+            times,
+          }))
+      );
+
+      const payload = {
+        movieId: selectedMovie.id,
+        movieTitle: selectedMovie.title,
+        type: movieType,
+        price: {
+          regular: Number(regularPrice),
+          vip: Number(vipPrice),
+        },
+        showsInput,
+      };
+
+      const { data } = await axios.post("/api/show/add", payload, {
+        headers: { Authorization: `Bearer ${await getToken()}` },
+      });
+
+      if (data.success) {
+        toast.success(data.message);
+        setSelectedMovie(null);
+        setDateTimeSelection({});
+        setDateTimeInput("");
+        setRegularPrice("");
+        setVipPrice("");
+        setMovieType("2D");
+        setSelectedHall("");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setAddingShow(false);
+    }
+  };
+
+  if (nowPlayingMovies.length === 0) return <Loading />;
+
+  return (
     <>
       <Title text1="Add" text2="Shows" />
-      <p className="mt-10 text-lg font-medium">Now Playing Movies</p>
 
+      {/* Movie Selection */}
+      <p className="mt-10 text-lg font-medium">Now Playing Movies</p>
       <div className="overflow-x-auto pb-4">
-        <div className="group flex flex-wrap gap-4 mt-4 w-max">
+        <div className="flex flex-wrap gap-4 mt-4 w-max">
           {nowPlayingMovies.map((movie) => (
             <div
               key={movie.id}
-              className={`relative max-w-40 cursor-pointer group-hover:not-hover:opacity-40 hover-translate-y-1 transition duration-300`}
-              onClick={() => setSelectedMovie(movie.id)}
+              className={`relative max-w-40 cursor-pointer hover:-translate-y-1 transition duration-300 ${
+                selectedMovie?.id === movie.id ? "ring-2 ring-primary" : ""
+              }`}
+              onClick={() => setSelectedMovie({ id: movie.id, title: movie.title })}
             >
               <div className="relative rounded-lg overflow-hidden">
                 <img
-                  src={movie.poster_path}
+                  src={image_base_url + movie.poster_path}
                   alt={movie.title}
                   className="w-full object-cover brightness-90"
                 />
                 <div className="text-sm flex items-center justify-between p-2 bg-black/70 w-full absolute bottom-0 left-0">
                   <p className="flex items-center gap-1 text-gray-400">
                     <StarIcon className="w-4 h-4 text-primary fill-primary-dull" />
-                    {movie.vote_average?.toFixed(1) ?? 'N/A'}
+                    {movie.vote_average?.toFixed(1) ?? "N/A"}
                   </p>
                   <p className="text-gray-300">{kConverter(movie.vote_count)} Votes</p>
                 </div>
               </div>
-
-              {selectedMovie === movie.id && (
+              {selectedMovie?.id === movie.id && (
                 <div className="absolute top-2 right-2 flex items-center justify-center bg-primary h-6 w-6 rounded">
                   <CheckIcon className="w-4 h-4 text-white" />
                 </div>
@@ -148,29 +192,58 @@ const AddShows = () => {
         </div>
       </div>
 
-      {/* Show Price Input */}
+      {/* Movie Type */}
       <div className="mt-8">
-        <label className="block text-sm font-medium mb-2">Show Price</label>
-        <div className="inline-flex items-center gap-2 border broder-gray-600 px-4 py-2 rounded-md">
-          <p className="text-gray-400 text-sm">{currency}</p>
-          <input
-            min={0}
-            type="number"
-            value={showPrice}
-            onChange={(e) => setShowPrice(e.target.value)}
-            placeholder="enter the show price"
-            className="outline-none"
-          />
+        <label className="block text-sm font-medium mb-2">Movie Type</label>
+        <select
+          value={movieType}
+          onChange={(e) => setMovieType(e.target.value)}
+          className="border border-gray-600 rounded-lg px-6 py-3 text-sm bg-transparent text-white"
+        >
+          {typeOptions.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Prices */}
+      <div className="mt-8 flex flex-col md:flex-row gap-6">
+        <div>
+          <label className="block text-sm font-medium mb-2">Regular Price</label>
+          <div className="inline-flex items-center gap-2 border border-gray-600 px-4 py-2 rounded-md">
+            <p className="text-gray-400 text-sm">{currency}</p>
+            <input
+              type="number"
+              min={0}
+              value={regularPrice}
+              onChange={(e) => setRegularPrice(e.target.value)}
+              placeholder="Enter regular price"
+              className="outline-none bg-transparent text-white"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">VIP Price</label>
+          <div className="inline-flex items-center gap-2 border border-gray-600 px-4 py-2 rounded-md">
+            <p className="text-gray-400 text-sm">{currency}</p>
+            <input
+              type="number"
+              min={0}
+              value={vipPrice}
+              onChange={(e) => setVipPrice(e.target.value)}
+              placeholder="Enter VIP price"
+              className="outline-none bg-transparent text-white"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Date & Time */}
+      {/* Hall & Date-Time */}
       <div className="mt-6">
         <label className="block text-sm font-medium mb-2">Select Hall, Date & Time</label>
-
-        {/* Flex row OUTSIDE of border */}
         <div className="flex flex-wrap items-center gap-5 mb-3">
-          {/* Hall Select */}
           <select
             value={selectedHall}
             onChange={(e) => setSelectedHall(e.target.value)}
@@ -183,8 +256,6 @@ const AddShows = () => {
               </option>
             ))}
           </select>
-
-          {/* Date-Time Input */}
           <input
             type="datetime-local"
             value={dateTimeInput}
@@ -192,18 +263,14 @@ const AddShows = () => {
             className="outline-none rounded-md text-sm"
             min={new Date().toISOString().slice(0, 16)}
           />
-
-          {/* Add Button */}
           <button
             onClick={handleDateTimeAdd}
             className="bg-primary/80 text-white px-3 py-2 text-sm rounded-lg hover:bg-primary cursor-pointer"
-            type="button"
           >
             Add Time
           </button>
         </div>
 
-        {/* Border for showtimes only */}
         <div className="border border-gray-600 p-3 rounded-lg">
           {Object.keys(dateTimeSelection).length === 0 && (
             <p className="text-sm text-gray-400">No showtimes added yet.</p>
@@ -211,27 +278,26 @@ const AddShows = () => {
         </div>
       </div>
 
-      {/* Display Selected Halls, Dates & Times */}
+      {/* Display Selected Halls */}
       {Object.keys(dateTimeSelection).length > 0 && (
         <div className="mt-6">
-          <h2 className="mb-2">Selected Hall, Date & Time</h2>
+          <h2 className="mb-2 text-lg font-semibold">Selected Hall, Date & Time</h2>
+          <p className="text-gray-400 mb-4">🎬 {selectedMovie?.title}</p>
 
           <ul className="space-y-4">
             {Object.entries(dateTimeSelection).map(([hall, hallData]) => (
-              <div key={hall} className="mb-4 border-b border-gray-700 pb-3">
-                <h3 className="font-semibold text-primary mb-2">{hall}</h3>
-
+              <div key={hall} className="mb-4 border border-gray-700 rounded-lg p-4 bg-black/30">
+                <h3 className="font-semibold text-primary text-lg mb-2">🏛️ Hall: {hall}</h3>
                 {Object.entries(hallData).map(([date, times]) => (
                   <div key={date} className="flex flex-col gap-2">
-                    <div className="font-medium text-gray-300">{date}</div>
-
+                    <div className="font-medium text-gray-300">📅 {date}</div>
                     <div className="flex flex-wrap gap-2 mt-1 text-sm">
                       {times.map((time) => (
                         <div
                           key={time}
-                          className="border border-primary px-2 py-1 flex items-center rounded"
+                          className="border border-primary px-3 py-1 flex items-center rounded"
                         >
-                          <span>{time}</span>
+                          ⏰ <span className="ml-1">{time}</span>
                           <TrashIcon
                             onClick={() => handleRemoveTime(hall, date, time)}
                             width={15}
@@ -248,14 +314,14 @@ const AddShows = () => {
         </div>
       )}
 
-      <button className='bg-primary text-white px-8 py-2 mt-6 rounded hover:bg-primary/90 transition-all cursor-pointer'>
-          Add Show
+      <button
+        onClick={handleSubmit}
+        disabled={addingShow}
+        className="bg-primary text-white px-8 py-2 mt-6 rounded hover:bg-primary/90 transition-all disabled:opacity-50"
+      >
+        {addingShow ? "Adding..." : "Add Show"}
       </button>
-
-
     </>
-  ) : (
-    <Loading />
   );
 };
 
