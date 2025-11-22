@@ -44,7 +44,7 @@ const App = () => {
         <Route path='/favorite' element={<Favorite/>}/>
         <Route path='/packages' element={<Packages />}/>
 
-      <Route path='/admin/' element={ user ? <Layout/> : (
+      <Route path='/admin/*' element={ user ? <Layout/> : (
         <div className='min-h-screen flex justify-center items-center'>
           <SignIn  fallbackRedirectUrl={'/admin'} />
       
