@@ -4,8 +4,11 @@ import { dummyDashboardData } from '../../assets/assets';
 import Loading from '../../components/Loading';
 import Title from './Title';
 import BlurCircle from '../../components/BlurCircle'; // make sure this exists
+import { useAppContext } from '../../context/AppContext';
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
+    const { axios, getToken, user, image_base_url } = useAppContext();
   const currency = import.meta.env.VITE_CURENCY
 
   const [DashboardData, setDashboardData] = useState({
@@ -23,14 +26,30 @@ const Dashboard = () => {
     { title: 'Total Users', value: DashboardData.totalUser || "0", icon: UserIcon }
   ];
 
-  const fetchDashboardData = async () => {
-    setDashboardData(dummyDashboardData);
-    setLoading(false);
-  };
+const fetchDashboardData = async () => {
+    try {
+        const { data } = await axios.get("/api/admin/dashboard", {
+            headers: { Authorization: `Bearer ${await getToken()}` }
+        });
+
+        if (data.success) {
+            setDashboardData(data.dashboardData); // lowercase
+        } else {
+            toast.error(data.message);
+        }
+    } catch (error) {
+        toast.error("Error fetching dashboard data");
+    } finally {
+        setLoading(false);
+    }
+};
 
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    if(user){
+      fetchDashboardData();
+
+    }
+    },[user]);
 
   
   return !loading ? (
