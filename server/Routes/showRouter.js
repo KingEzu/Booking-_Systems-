@@ -9,4 +9,3 @@ showRouter.get("/all", getShows)
 showRouter.get("/:movieId", getShow)
 
 export default showRouter;
-
