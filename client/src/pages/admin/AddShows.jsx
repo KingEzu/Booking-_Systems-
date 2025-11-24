@@ -121,6 +121,7 @@ const AddShows = () => {
           regular: Number(regularPrice),
           vip: Number(vipPrice),
         },
+      
         showsInput,
       };
 
