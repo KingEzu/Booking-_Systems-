@@ -2,9 +2,12 @@ import { StarIcon } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TimeForamt from '../lib/TimeForamt';
+import { useAppContext } from '../context/AppContext';
+
 
 const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
+  const {image_base_url } = useAppContext();
 
   return (
     <div className="group flex flex-col justify-between bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-yellow-500/20 hover:-translate-y-1 transition-transform duration-300 w-64">
@@ -15,7 +18,7 @@ const MovieCard = ({ movie }) => {
             navigate(`/movie/${movie._id}`);
             window.scrollTo(0, 0);
           }}
-          src={movie.backdrop_path || '/images/default-poster.jpg'}
+          src={image_base_url + movie.poster_path || '/images/default-poster.jpg'}
           alt={movie.title || 'Movie Poster'}
           className="w-full h-full object-cover object-center rounded-t-2xl transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
         />
