@@ -4,40 +4,80 @@ import Loading from "../components/Loading";
 import BlurCircle from "../components/BlurCircle";
 import TimeForamt from "../lib/TimeForamt";
 import { dateFormat } from "../lib/dateFormat";
+import { useAppContext } from "../context/AppContext";
 
 const MyBookings = () => {
   const currency = import.meta.env.VITE_CURENCY;
-
+  const { axios, getToken, user, image_base_url } = useAppContext();
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const getMyBookings = async () => {
-    setBookings(dummyBookingData);
+    try {
+      const { data } = await axios.get("/api/user/bookings", {
+        headers: { Authorization: `Bearer ${await getToken()}` },
+      });
+
+      if (data.success) {
+        setBookings(data.bookings);
+      }
+    } catch (error) {
+      console.log(error);
+    }
     setIsLoading(false);
   };
 
   useEffect(() => {
-    getMyBookings();
-  }, []);
+    if (user) {
+      getMyBookings();
+    }
+  }, [user]);
 
   return !isLoading ? (
-    <div className="relative px-4 sm:px-8 md:px-16 lg:px-32 xl:px-40 pt-28 md:pt-36 min-h-[80vh]">
+    <div
+      className="
+        relative 
+        px-4 sm:px-8 md:px-16 lg:px-32 xl:px-40 
+        pt-28 md:pt-36 
+        min-h-[80vh]
+        overflow-x-hidden
+        overflow-y-auto
+      "
+    >
       {/* Background Blur Decorations */}
       <BlurCircle top="100px" left="100px" />
       <BlurCircle bottom="0px" left="600px" />
 
-      <h1 className="text-xl md:text-2xl font-semibold mb-6">My Bookings</h1>
+      <h1
+        className="
+          text-center 
+          font-bold 
+          mb-8 
+          text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 
+          text-white underline mt-10 
+          bg-clip-text tracking-tight
+        "
+      >
+        My Bookings
+      </h1>
 
       <div className="flex flex-col gap-6">
         {bookings.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col md:flex-row justify-between bg-primary/10 border border-primary/20 rounded-2xl shadow-sm hover:shadow-md transition-shadow p-4 md:p-6 w-full max-w-4xl"
+            className="
+              flex flex-col md:flex-row 
+              justify-between 
+              bg-primary/10 border border-primary/20 
+              rounded-2xl shadow-sm hover:shadow-md 
+              transition-shadow p-4 md:p-6 
+              w-full max-w-4xl mx-auto
+            "
           >
             {/* Left Section */}
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
               <img
-                src={item.show.movie.poster_path}
+                src={image_base_url + item.show.movie.poster_path}
                 alt={item.show.movie.title}
                 className="w-full sm:w-40 h-56 sm:h-auto object-cover rounded-lg border border-gray-700"
               />
@@ -88,7 +128,7 @@ const MyBookings = () => {
                     <ul className="list-none ml-0 mt-1 space-y-1">
                       {item.Snacks.map((snack, i) => (
                         <li key={i}>
-                         {snack.quantity} {" "}  {snack.name} 
+                          {snack.quantity} {snack.name}
                         </li>
                       ))}
                     </ul>
