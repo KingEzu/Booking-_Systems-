@@ -1,8 +1,9 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboardIcon, ListCollapseIcon, ListIcon, PlusSquareIcon, LogOutIcon } from 'lucide-react'
+import { LayoutDashboardIcon, ListCollapseIcon, ListIcon, PlusSquareIcon, LogOutIcon, PlusCircleIcon, ListChevronsUpDownIcon } from 'lucide-react'
 import { assets } from '../../assets/assets'
 import { CubeIcon } from '@heroicons/react/16/solid'
+import path from 'path'
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
@@ -19,7 +20,9 @@ const AdminSidebar = () => {
     { name: 'List Shows', path: '/admin/list-shows', icon: ListIcon },
     { name: 'List Bookings', path: '/admin/list-booking', icon: ListCollapseIcon },
     { name: 'ManageSnacks', path: '/admin/ManageSnacks', icon: CubeIcon },
-  ]
+    { name: 'Add Coming Soon', path: '/admin/AddUpcoming', icon: PlusCircleIcon},
+    { name: 'Coming Soon', path: '/admin/List-Upcoming', icon: ListChevronsUpDownIcon}
+  ] 
 
   const handleLogout = () => {
     // Example: remove token from localStorage/session or call API logout
